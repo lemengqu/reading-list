@@ -14,7 +14,9 @@ function TodoItem({ book, deleteBook, toggleRead }) {
     <div className={itemType}>
       <input type="checkbox" checked={book.read} onChange={handleChange} />
       <p>{book.title}</p>
-      <button onClick={() => deleteBook(book.id)}>X</button>
+      <button className="delete-btn" onClick={() => deleteBook(book.id)}>
+        X
+      </button>
     </div>
   );
 }

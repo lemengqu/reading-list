@@ -10,18 +10,25 @@ function TodoList() {
   const [newTitle, setNewTitle] = useState("");
 
   useEffect(() => {
-    console.log("useEffect: saving books", JSON.stringify(books));
     localStorage.setItem("books", JSON.stringify(books));
   }, [books]);
 
   function addBook(title: string) {
+    if (!title.trim()) return; // Prevent adding empty titles
+
     const newBook = {
       id: Date.now(),
       title,
       read: false,
     };
-    setBooks([...books, newBook]);
+    setBooks([newBook, ...books]);
     setNewTitle("");
+  }
+
+  function handleKeyPress(e) {
+    if (e.key === "Enter") {
+      addBook(newTitle);
+    }
   }
 
   function deleteBook(id: number) {
@@ -42,6 +49,16 @@ function TodoList() {
 
   return (
     <div className="todo-list">
+      <div className="add-book-container">
+        <input
+          type="text"
+          placeholder="Enter Title..."
+          value={newTitle}
+          onChange={(e) => setNewTitle(e.target.value)}
+          onKeyPress={handleKeyPress}
+        />
+        <button onClick={() => addBook(newTitle)}>Add</button>
+      </div>
       {books.map((book) => (
         <TodoItem
           key={book.id}
@@ -50,12 +67,6 @@ function TodoList() {
           toggleRead={toggleRead}
         />
       ))}
-      <input
-        placeholder="Enter Title..."
-        value={newTitle}
-        onChange={(e) => setNewTitle(e.target.value)}
-      />
-      <button onClick={() => addBook(newTitle)}>Add</button>
     </div>
   );
 }
