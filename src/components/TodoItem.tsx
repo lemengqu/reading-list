@@ -1,5 +1,6 @@
 import React from "react";
 import { Book } from "../types";
+import "./TodoItem.css";
 
 interface TodoItemProps {
   book: Book; // The book item to display
@@ -25,11 +26,30 @@ function TodoItem({ book, deleteBook, toggleRead }: TodoItemProps) {
 
   return (
     <div className={itemType} title={tooltipText}>
-      <input type="checkbox" checked={book.read} onChange={handleChange} />
-      <p>{book.title}</p>
-      <button className="delete-btn" onClick={() => deleteBook(book.id)}>
-        X
-      </button>
+      <div className="book-content">
+        <div className="book-checkbox">
+          <input type="checkbox" checked={book.read} onChange={handleChange} />
+        </div>
+        {book.thumbnail && (
+          <img 
+            src={book.thumbnail} 
+            alt={`Cover of ${book.title}`} 
+            className="book-thumbnail"
+            onError={(e) => {
+              // Fallback if image fails to load
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+            }}
+          />
+        )}
+        <div className="book-details">
+          <p className="book-title">{book.title}</p>
+          {book.author && <p className="book-author">by {book.author}</p>}
+        </div>
+        <button className="delete-btn" onClick={() => deleteBook(book.id)}>
+          X
+        </button>
+      </div>
     </div>
   );
 }

@@ -39,13 +39,16 @@ function TodoList() {
   }
 
   function addBookFromAPI(book: GoogleBook) {
-    const newBook = {
+    const newBook: Book = {
       id: Date.now(),
       title: book.volumeInfo.title,
+      author: book.volumeInfo.authors?.[0], // Take the first author if available
+      thumbnail: book.volumeInfo.imageLinks?.thumbnail,
       read: false,
       dateAdded: new Date().toISOString(),
       dateCompleted: null,
     };
+    console.log(newBook, "newBook");
     setBooks([newBook, ...books]);
     setNewTitle("");
     setSearchResults([]);
@@ -57,8 +60,6 @@ function TodoList() {
     setNewTitle(value);
     setShowDropdown(true);
     searchBooks(value);
-    console.log(showDropdown, "showDropdown");
-    console.log(searchResults, "searchResults");
   }
 
   function handleKeyPress(e: { key: string }) {
