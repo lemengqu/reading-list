@@ -1,19 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TodoItem from "./TodoItem";
-import { Book } from "../types";
+import { Book, GoogleBook } from "../types";
 import "./TodoList.css";
-
-interface GoogleBook {
-  id: string;
-  volumeInfo: {
-    title: string;
-    authors?: string[];
-    description?: string;
-    imageLinks?: {
-      thumbnail?: string;
-    };
-  };
-}
 
 function TodoList() {
   const [books, setBooks] = useState(() => {

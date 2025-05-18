@@ -5,3 +5,14 @@ export interface Book {
   dateAdded: string | number; // Timestamp or ISO string when the book was added
   dateCompleted?: string | number; // Optional timestamp when the book was completed
 }
+export interface GoogleBook {
+  id: string;
+  volumeInfo: {
+    title: string;
+    authors?: string[];
+    description?: string;
+    imageLinks?: {
+      thumbnail?: string;
+    };
+  };
+}
