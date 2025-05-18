@@ -134,6 +134,7 @@ function TodoList() {
         .filter((book: Book) =>
           book.title.toLowerCase().startsWith(searchTitle.toLowerCase())
         )
+        .sort((a: Book, b: Book) => a.title.localeCompare(b.title))
         .map((book: Book) => (
           <TodoItem
             key={book.id}
