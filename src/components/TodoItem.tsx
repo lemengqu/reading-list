@@ -4,8 +4,8 @@ import "./TodoItem.css";
 
 interface TodoItemProps {
   book: Book; // The book item to display
-  deleteBook: (id: number) => void; // Function to delete the book
-  toggleRead: (id: number) => void; // Function to toggle the read status
+  deleteBook: (id: string) => void; // Function to delete the book
+  toggleRead: (id: string) => void; // Function to toggle the read status
 }
 function TodoItem({ book, deleteBook, toggleRead }: TodoItemProps) {
   const { id, title, read, dateAdded, dateCompleted } = book;
@@ -31,14 +31,14 @@ function TodoItem({ book, deleteBook, toggleRead }: TodoItemProps) {
           <input type="checkbox" checked={book.read} onChange={handleChange} />
         </div>
         {book.thumbnail && (
-          <img 
-            src={book.thumbnail} 
-            alt={`Cover of ${book.title}`} 
+          <img
+            src={book.thumbnail}
+            alt={`Cover of ${book.title}`}
             className="book-thumbnail"
             onError={(e) => {
               // Fallback if image fails to load
               const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
+              target.style.display = "none";
             }}
           />
         )}

@@ -1,5 +1,5 @@
 export interface Book {
-  id: number; // Unique identifier for the book item
+  id: string; // Unique identifier for the book item
   title: string; // Title of the book
   author?: string; // Author of the book
   thumbnail?: string; // URL of the book's thumbnail image

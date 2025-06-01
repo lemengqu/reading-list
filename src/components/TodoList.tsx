@@ -31,7 +31,11 @@ function TodoList() {
         )}&maxResults=10`
       );
       const data = await response.json();
-      setSearchResults(data.items || []);
+      const savedBookIds = new Set(books.map((book: Book) => book.id));
+      const filteredResults = (data.items || []).filter(
+        (book: GoogleBook) => !savedBookIds.has(book.id)
+      );
+      setSearchResults(filteredResults);
     } catch (error) {
       console.error("Error searching books:", error);
       setSearchResults([]);
@@ -39,8 +43,9 @@ function TodoList() {
   }
 
   function addBookFromAPI(book: GoogleBook) {
+    console.log(book.id);
     const newBook: Book = {
-      id: Date.now(),
+      id: book.id,
       title: book.volumeInfo.title,
       author: book.volumeInfo.authors?.[0], // Take the first author if available
       thumbnail: book.volumeInfo.imageLinks?.thumbnail,
@@ -62,18 +67,11 @@ function TodoList() {
     searchBooks(value);
   }
 
-  function handleKeyPress(e: { key: string }) {
-    if (e.key === "Enter") {
-      setShowDropdown(true);
-      searchBooks(newTitle);
-    }
-  }
-
-  function deleteBook(id: number) {
+  function deleteBook(id: string) {
     setBooks(books.filter((book: Book) => book.id !== id));
   }
 
-  function toggleRead(id: number) {
+  function toggleRead(id: string) {
     setBooks(
       books.map((book: Book) =>
         book.id === id
@@ -96,7 +94,6 @@ function TodoList() {
             placeholder="Search for a book..."
             value={newTitle}
             onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
           />
           {showDropdown && searchResults.length > 0 && (
             <div className="search-dropdown">
@@ -134,7 +131,11 @@ function TodoList() {
         .filter((book: Book) =>
           book.title.toLowerCase().startsWith(searchTitle.toLowerCase())
         )
-        .sort((a: Book, b: Book) => a.title.localeCompare(b.title))
+        .sort((a: Book, b: Book) => {
+          if (a.read && !b.read) return 1;
+          if (!a.read && b.read) return -1;
+          return a.title.localeCompare(b.title);
+        })
         .map((book: Book) => (
           <TodoItem
             key={book.id}
