@@ -92,24 +92,26 @@ function TodoList() {
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
     return (
-      <div className="star-rating" style={{ display: "flex", gap: "2px" }}>
+      <div className="star-rating">
         {[...Array(fullStars)].map((_, i) => (
-          <span key={`full-${i}`} style={{ color: "#ffd700" }}>
-            ★
-          </span>
+          <span style={{ color: "#ffd700" }}>★</span>
         ))}
         {hasHalfStar && (
           <span
             style={{
-              color: "#ffd700",
               position: "relative",
               overflow: "hidden",
               width: "1em",
             }}
           >
-            <span style={{ position: "absolute", left: 0, top: 0 }}>★</span>
+            <span
+              style={{ position: "absolute", color: "#ddd", left: 0, top: 0 }}
+            >
+              ★
+            </span>
             <span
               style={{
+                color: "#ffd700",
                 position: "absolute",
                 left: 0,
                 top: 0,
