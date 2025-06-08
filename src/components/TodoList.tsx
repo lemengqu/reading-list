@@ -9,7 +9,7 @@ function TodoList() {
     return savedBooks ? JSON.parse(savedBooks) : [];
   });
 
-  const [newTitle, setNewTitle] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchTitle, setSearchTitle] = useState<string>("");
   const [searchResults, setSearchResults] = useState<GoogleBook[]>([]);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
@@ -28,9 +28,10 @@ function TodoList() {
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
           query
-        )}&maxResults=10`
+        )}&maxResults=10&projection=full`
       );
       const data = await response.json();
+      console.log(data);
       const savedBookIds = new Set(books.map((book: Book) => book.id));
       const filteredResults = (data.items || []).filter(
         (book: GoogleBook) => !savedBookIds.has(book.id)
@@ -55,14 +56,14 @@ function TodoList() {
     };
     console.log(newBook, "newBook");
     setBooks([newBook, ...books]);
-    setNewTitle("");
+    setSearchQuery("");
     setSearchResults([]);
     setShowDropdown(false);
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
-    setNewTitle(value);
+    setSearchQuery(value);
     setShowDropdown(true);
     searchBooks(value);
   }
@@ -85,6 +86,50 @@ function TodoList() {
     );
   }
 
+  const renderStarRating = (rating: number) => {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+    return (
+      <div className="star-rating" style={{ display: "flex", gap: "2px" }}>
+        {[...Array(fullStars)].map((_, i) => (
+          <span key={`full-${i}`} style={{ color: "#ffd700" }}>
+            ★
+          </span>
+        ))}
+        {hasHalfStar && (
+          <span
+            style={{
+              color: "#ffd700",
+              position: "relative",
+              overflow: "hidden",
+              width: "1em",
+            }}
+          >
+            <span style={{ position: "absolute", left: 0, top: 0 }}>★</span>
+            <span
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: "50%",
+                overflow: "hidden",
+              }}
+            >
+              ★
+            </span>
+          </span>
+        )}
+        {[...Array(emptyStars)].map((_, i) => (
+          <span key={`empty-${i}`} style={{ color: "#ddd" }}>
+            ★
+          </span>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="todo-list">
       <div className="text-box-container">
@@ -92,39 +137,47 @@ function TodoList() {
           <input
             type="text"
             placeholder="Search for a book..."
-            value={newTitle}
+            value={searchQuery}
             onChange={handleInputChange}
           />
-          {showDropdown && searchResults.length > 0 && (
-            <div className="search-dropdown">
-              {searchResults.map((book) => (
-                <div
-                  key={book.id}
-                  className="search-result"
-                  onClick={() => addBookFromAPI(book)}
-                >
-                  <img
-                    src={book.volumeInfo.imageLinks?.thumbnail || ""}
-                    alt={book.volumeInfo.title}
-                    className="book-cover"
-                  />
-                  <div className="book-info">
-                    <h3>{book.volumeInfo.title}</h3>
-                    {book.volumeInfo.authors && (
-                      <p className="book-authors">
-                        {book.volumeInfo.authors.join(", ")}
-                      </p>
-                    )}
-                    {book.volumeInfo.description && (
-                      <p className="book-description">
-                        {book.volumeInfo.description.substring(0, 100)}...
-                      </p>
-                    )}
+          {showDropdown &&
+            searchResults.length > 0 &&
+            searchQuery.length > 0 && (
+              <div className="search-dropdown">
+                {searchResults.map((book) => (
+                  <div
+                    key={book.id}
+                    className="search-result"
+                    onClick={() => addBookFromAPI(book)}
+                  >
+                    <img
+                      src={book.volumeInfo.imageLinks?.thumbnail || ""}
+                      alt={book.volumeInfo.title}
+                      className="book-cover"
+                    />
+                    <div className="book-info">
+                      <h3>{book.volumeInfo.title}</h3>
+                      {book.volumeInfo.authors && (
+                        <p className="book-authors">
+                          {book.volumeInfo.authors.join(", ")}
+                        </p>
+                      )}
+                      {book.volumeInfo.description && (
+                        <p className="book-description">
+                          {book.volumeInfo.description.substring(0, 100)}...
+                        </p>
+                      )}
+                      {book.volumeInfo.averageRating && (
+                        <p className="book-description">
+                          Rating:
+                          {renderStarRating(book.volumeInfo.averageRating)}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
         </div>
       </div>
       {books
