@@ -10,6 +10,7 @@ export interface Book {
 export interface GoogleBook {
   id: string;
   volumeInfo: {
+    averageRating?: number;
     title: string;
     authors?: string[];
     description?: string;
