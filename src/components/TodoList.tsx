@@ -3,7 +3,11 @@ import TodoItem from "./TodoItem";
 import { Book, GoogleBook } from "../types";
 import "./TodoList.css";
 
-function TodoList() {
+interface TodoListProps {
+  setShareContent: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const TodoList: React.FC<TodoListProps> = ({ setShareContent }) => {
   const [books, setBooks] = useState(() => {
     const savedBooks = localStorage.getItem("books");
     return savedBooks ? JSON.parse(savedBooks) : [];
@@ -16,7 +20,19 @@ function TodoList() {
 
   useEffect(() => {
     localStorage.setItem("books", JSON.stringify(books));
-  }, [books]);
+    // Generate human-readable string for sharing
+    const readableBooks = books
+      .map((book: Book) => {
+        let bookStr = `- ${book.title}`;
+        if (book.author) {
+          bookStr += ` by ${book.author}`;
+        }
+        bookStr += ` (Status: ${book.read ? 'Read' : 'Unread'})`;
+        return bookStr;
+      })
+      .join('\n');
+    setShareContent(readableBooks);
+  }, [books, setShareContent]);
 
   async function searchBooks(query: string) {
     if (!query.trim()) {
