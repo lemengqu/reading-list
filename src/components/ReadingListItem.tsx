@@ -1,13 +1,17 @@
 import React from "react";
 import { Book } from "../types";
-import "./TodoItem.css";
+import "./ReadingListItem.css";
 
-interface TodoItemProps {
+interface ReadingListItemProps {
   book: Book; // The book item to display
   deleteBook: (id: string) => void; // Function to delete the book
   toggleRead: (id: string) => void; // Function to toggle the read status
 }
-function TodoItem({ book, deleteBook, toggleRead }: TodoItemProps) {
+function ReadingListItem({
+  book,
+  deleteBook,
+  toggleRead,
+}: ReadingListItemProps) {
   const { id, title, read, dateAdded, dateCompleted } = book;
 
   const tooltipText = `Added: ${new Date(dateAdded).toLocaleString()}${
@@ -19,9 +23,9 @@ function TodoItem({ book, deleteBook, toggleRead }: TodoItemProps) {
     toggleRead(book.id);
   }
 
-  let itemType = "todo-item";
+  let itemType = "reading-item";
   if (book.read) {
-    itemType = "todo-item read";
+    itemType = "reading-item read";
   }
 
   return (
@@ -54,4 +58,4 @@ function TodoItem({ book, deleteBook, toggleRead }: TodoItemProps) {
   );
 }
 
-export default TodoItem;
+export default ReadingListItem;

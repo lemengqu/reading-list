@@ -57,14 +57,14 @@ button:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.todo-list {
+.reading-list {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.todo-item {
+.reading-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -78,19 +78,19 @@ button:hover {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.todo-item p {
+.reading-item p {
   margin: 0;
   flex: 1;
   padding-left: 10px;
 }
 
-.todo-item input[type="checkbox"] {
+.reading-item input[type="checkbox"] {
   transform: scale(1.2);
   margin-right: 5px;
   cursor: pointer;
 }
 
-.todo-item button {
+.reading-item button {
   padding: 4px 10px;
   background-color: #e74c3c;
   border-radius: 6px;
@@ -98,7 +98,7 @@ button:hover {
   min-width: 32px;
 }
 
-.todo-item button:hover {
+.reading-item button:hover {
   background-color: #c0392b;
 }
 

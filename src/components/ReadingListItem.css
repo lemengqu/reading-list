@@ -1,4 +1,4 @@
-.todo-item {
+.reading-item {
   display: flex;
   align-items: center;
   padding: 12px;
@@ -9,7 +9,7 @@
   transition: all 0.2s ease;
 }
 
-.todo-item:hover {
+.reading-item:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -79,17 +79,17 @@
   transition: opacity 0.2s;
 }
 
-.todo-item:hover .delete-btn {
+.reading-item:hover .delete-btn {
   opacity: 1;
 }
 
 /* Styling for read books */
-.todo-item.read {
+.reading-item.read {
   background-color: #f9f9f9;
 }
 
-.todo-item.read .book-title,
-.todo-item.read .book-author {
+.reading-item.read .book-title,
+.reading-item.read .book-author {
   color: #999;
   text-decoration: line-through;
 }

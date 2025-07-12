@@ -1,6 +1,5 @@
 import React from "react";
-import TodoList from "./components/TodoList";
-
+import ReadingList from "./components/ReadingList";
 function App() {
   const [shareContent, setShareContent] = React.useState<string>("");
   return (
@@ -40,7 +39,7 @@ function App() {
           Copy
         </button>
       </div>
-      <TodoList setShareContent={setShareContent} />
+      <ReadingList setShareContent={setShareContent} />
     </div>
   );
 }

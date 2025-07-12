@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import TodoItem from "./TodoItem";
 import { Book, GoogleBook } from "../types";
-import "./TodoList.css";
+import "./ReadingList.css";
+import ReadingListItem from "./ReadingListItem";
 
-interface TodoListProps {
+interface ReadingListProps {
   setShareContent: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const TodoList: React.FC<TodoListProps> = ({ setShareContent }) => {
+const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
   const [books, setBooks] = useState(() => {
     const savedBooks = localStorage.getItem("books");
     return savedBooks ? JSON.parse(savedBooks) : [];
@@ -27,10 +27,10 @@ const TodoList: React.FC<TodoListProps> = ({ setShareContent }) => {
         if (book.author) {
           bookStr += ` by ${book.author}`;
         }
-        bookStr += ` (Status: ${book.read ? 'Read' : 'Unread'})`;
+        bookStr += ` (Status: ${book.read ? "Read" : "Unread"})`;
         return bookStr;
       })
-      .join('\n');
+      .join("\n");
     setShareContent(readableBooks);
   }, [books, setShareContent]);
 
@@ -149,7 +149,7 @@ const TodoList: React.FC<TodoListProps> = ({ setShareContent }) => {
   };
 
   return (
-    <div className="todo-list">
+    <div className="reading-list">
       <div className="text-box-container">
         <div className="search-container">
           <input
@@ -208,7 +208,7 @@ const TodoList: React.FC<TodoListProps> = ({ setShareContent }) => {
           return a.title.localeCompare(b.title);
         })
         .map((book: Book) => (
-          <TodoItem
+          <ReadingListItem
             key={book.id}
             book={book}
             deleteBook={deleteBook}
@@ -217,6 +217,6 @@ const TodoList: React.FC<TodoListProps> = ({ setShareContent }) => {
         ))}
     </div>
   );
-}
+};
 
-export default TodoList;
+export default ReadingList;
