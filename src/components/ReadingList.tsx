@@ -102,6 +102,16 @@ const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
     );
   }
 
+  function handleRatingChange(id: string, rating: number) {
+    setBooks(
+      books.map((book: Book) =>
+        book.id === id
+          ? { ...book, rating }
+          : book
+      )
+    );
+  }
+
   const renderStarRating = (rating: number) => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
@@ -213,6 +223,7 @@ const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
             book={book}
             deleteBook={deleteBook}
             toggleRead={toggleRead}
+            onRatingChange={handleRatingChange}
           />
         ))}
     </div>

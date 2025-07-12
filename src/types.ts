@@ -6,6 +6,7 @@ export interface Book {
   read: boolean; // Whether the book has been marked as read
   dateAdded: string | number; // Timestamp or ISO string when the book was added
   dateCompleted: string | number | null; // Timestamp when the book was completed, or null if not completed
+  rating?: number;
 }
 export interface GoogleBook {
   id: string;

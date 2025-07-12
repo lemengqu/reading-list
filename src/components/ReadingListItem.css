@@ -55,6 +55,13 @@
   text-overflow: ellipsis;
 }
 
+.book-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
 .book-author {
   margin: 0;
   font-size: 14px;
@@ -62,6 +69,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-shrink: 0;
 }
 
 .delete-btn {
@@ -89,7 +97,12 @@
 }
 
 .reading-item.read .book-title,
-.reading-item.read .book-author {
-  color: #999;
+.reading-item.read .book-author,
+.reading-item.read .star-rating .star {
+  color: #ccc;
   text-decoration: line-through;
+}
+
+.reading-item.read .star-rating .star.filled {
+  color: #e0c97e;
 }

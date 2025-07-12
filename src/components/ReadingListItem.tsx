@@ -1,16 +1,19 @@
 import React from "react";
 import { Book } from "../types";
 import "./ReadingListItem.css";
+import StarRating from "./StarRating";
 
 interface ReadingListItemProps {
   book: Book; // The book item to display
   deleteBook: (id: string) => void; // Function to delete the book
   toggleRead: (id: string) => void; // Function to toggle the read status
+  onRatingChange: (id: string, rating: number) => void; // Function to handle rating changes
 }
 function ReadingListItem({
   book,
   deleteBook,
   toggleRead,
+  onRatingChange,
 }: ReadingListItemProps) {
   const { id, title, read, dateAdded, dateCompleted } = book;
 
@@ -48,7 +51,13 @@ function ReadingListItem({
         )}
         <div className="book-details">
           <p className="book-title">{book.title}</p>
-          {book.author && <p className="book-author">by {book.author}</p>}
+          <div className="book-meta">
+            {book.author && <p className="book-author">by {book.author}</p>}
+            <StarRating 
+              rating={book.rating || 0} 
+              onRatingChange={(rating) => onRatingChange(book.id, rating)} 
+            />
+          </div>
         </div>
         <button className="delete-btn" onClick={() => deleteBook(book.id)}>
           X
