@@ -72,6 +72,14 @@
   flex-shrink: 0;
 }
 
+.action-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  margin-left: 8px;
+}
+
 .delete-btn {
   background: #ff4d4f;
   color: white;
@@ -89,6 +97,11 @@
 
 .reading-item:hover .delete-btn {
   opacity: 1;
+}
+
+.star-rating {
+  opacity: 1;
+  transition: opacity 0.2s;
 }
 
 /* Styling for read books */

@@ -53,15 +53,17 @@ function ReadingListItem({
           <p className="book-title">{book.title}</p>
           <div className="book-meta">
             {book.author && <p className="book-author">by {book.author}</p>}
-            <StarRating 
-              rating={book.rating || 0} 
-              onRatingChange={(rating) => onRatingChange(book.id, rating)} 
-            />
           </div>
         </div>
-        <button className="delete-btn" onClick={() => deleteBook(book.id)}>
-          X
-        </button>
+        <div className="action-container">
+          <StarRating
+            rating={book.rating || 0}
+            onRatingChange={(rating) => onRatingChange(book.id, rating)}
+          />
+          <button className="delete-btn" onClick={() => deleteBook(book.id)}>
+            X
+          </button>
+        </div>
       </div>
     </div>
   );
