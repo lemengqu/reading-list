@@ -14,7 +14,6 @@ const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
   });
 
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [searchTitle, setSearchTitle] = useState<string>("");
   const [searchResults, setSearchResults] = useState<GoogleBook[]>([]);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
@@ -104,11 +103,7 @@ const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
 
   function handleRatingChange(id: string, rating: number) {
     setBooks(
-      books.map((book: Book) =>
-        book.id === id
-          ? { ...book, rating }
-          : book
-      )
+      books.map((book: Book) => (book.id === id ? { ...book, rating } : book))
     );
   }
 
@@ -119,7 +114,7 @@ const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
 
     return (
       <div className="star-rating">
-        {[...Array(fullStars)].map((_, i) => (
+        {[...Array(fullStars)].map((_) => (
           <span style={{ color: "#ffd700" }}>★</span>
         ))}
         {hasHalfStar && (
@@ -209,9 +204,6 @@ const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
         </div>
       </div>
       {books
-        .filter((book: Book) =>
-          book.title.toLowerCase().startsWith(searchTitle.toLowerCase())
-        )
         .sort((a: Book, b: Book) => {
           if (a.read && !b.read) return 1;
           if (!a.read && b.read) return -1;

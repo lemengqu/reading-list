@@ -1,4 +1,3 @@
-import React from "react";
 import { Book } from "../types";
 import "./ReadingListItem.css";
 import StarRating from "./StarRating";
@@ -15,7 +14,7 @@ function ReadingListItem({
   toggleRead,
   onRatingChange,
 }: ReadingListItemProps) {
-  const { id, title, read, dateAdded, dateCompleted } = book;
+  const { read, dateAdded, dateCompleted } = book;
 
   const tooltipText = `Added: ${new Date(dateAdded).toLocaleString()}${
     read && dateCompleted
