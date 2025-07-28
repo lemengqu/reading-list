@@ -1,12 +1,13 @@
 .reading-item {
   display: flex;
-  align-items: center;
-  padding: 12px;
+  flex-direction: column;
   background: white;
   border-radius: 8px;
   margin-bottom: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
+  overflow: hidden;
+  padding: 0; /* Remove padding from container */
 }
 
 .reading-item:hover {
@@ -16,9 +17,13 @@
 
 .book-content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   gap: 12px;
+  padding: 12px 12px 8px 12px;
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
 }
 
 .book-checkbox {
@@ -37,22 +42,42 @@
   object-fit: cover;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  margin-top: 2px; /* Fine-tune vertical alignment */
 }
 
 .book-details {
+  display: flex;
+  flex: 1;
+}
+
+.book-info {
   flex: 1;
   min-width: 0;
-  margin-right: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin-right: 8px;
+}
+
+.book-header {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 8px;
+  gap: 16px;
 }
 
 .book-title {
-  margin: 0 0 4px 0;
+  margin: 0;
   font-size: 16px;
   font-weight: 500;
   color: #333;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
+  flex: 1;
+  min-width: 120px;
+  line-height: 1.3; /* Adjust line height for better vertical alignment */
 }
 
 .book-meta {
@@ -76,8 +101,91 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 15px;
-  margin-left: 8px;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-left: auto; /* This will push the container to the right */
+}
+
+.rating-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  text-align: right;
+}
+
+.review-btn {
+  background: none;
+  border: none;
+  color: #000000;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.review-btn:hover {
+  background-color: #f0f0f0;
+  text-decoration: underline;
+}
+
+.review-section {
+  width: 100%;
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #eee;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 0;
+  margin-top: 0;
+}
+
+.review-textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  display: block;
+}
+
+.review-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.submit-review {
+  background-color: #1890ff;
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.submit-review:hover {
+  background-color: #000000;
+}
+
+.cancel-review {
+  background: none;
+  border: 1px solid #d9d9d9;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cancel-review:hover {
+  border-color: #40a9ff;
+  color: #40a9ff;
 }
 
 .delete-btn {

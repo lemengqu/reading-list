@@ -1,6 +1,7 @@
 import { Book } from "../types";
 import "./ReadingListItem.css";
 import StarRating from "./StarRating";
+import { useState, useEffect } from "react";
 
 interface ReadingListItemProps {
   book: Book; // The book item to display
@@ -30,6 +31,36 @@ function ReadingListItem({
     itemType = "reading-item read";
   }
 
+  const [isReviewExpanded, setIsReviewExpanded] = useState(false);
+  const [reviewText, setReviewText] = useState("");
+
+  // Load saved review from localStorage when component mounts
+  useEffect(() => {
+    const savedReview = localStorage.getItem(`bookReview_${book.id}`);
+    if (savedReview) {
+      setReviewText(savedReview);
+    }
+  }, [book.id]);
+
+  // Save review to localStorage whenever it changes
+  const handleReviewChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    setReviewText(newText);
+    localStorage.setItem(`bookReview_${book.id}`, newText);
+  };
+
+  const toggleReview = () => {
+    setIsReviewExpanded(!isReviewExpanded);
+  };
+
+  const handleReviewSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Here you would typically save the review
+    console.log("Review submitted:", reviewText);
+    // Optionally collapse after submit
+    setIsReviewExpanded(false);
+  };
+
   return (
     <div className={itemType} title={tooltipText}>
       <div className="book-content">
@@ -42,28 +73,60 @@ function ReadingListItem({
             alt={`Cover of ${book.title}`}
             className="book-thumbnail"
             onError={(e) => {
-              // Fallback if image fails to load
               const target = e.target as HTMLImageElement;
               target.style.display = "none";
             }}
           />
         )}
         <div className="book-details">
-          <p className="book-title">{book.title}</p>
-          <div className="book-meta">
-            {book.author && <p className="book-author">by {book.author}</p>}
+          <div className="book-header">
+            <div className="book-info">
+              <p className="book-title">{book.title}</p>
+              {book.author && <p className="book-author">by {book.author}</p>}
+            </div>
+            <div className="action-container">
+              <div className="rating-container">
+                <StarRating
+                  rating={book.rating || 0}
+                  onRatingChange={(rating) => onRatingChange(book.id, rating)}
+                />
+                <button
+                  className="review-btn"
+                  onClick={toggleReview}
+                  aria-expanded={isReviewExpanded}
+                >
+                  {isReviewExpanded ? "Hide" : "Review..."}
+                </button>
+              </div>
+              <button
+                className="delete-btn"
+                onClick={() => deleteBook(book.id)}
+              >
+                X
+              </button>
+            </div>
           </div>
         </div>
-        <div className="action-container">
-          <StarRating
-            rating={book.rating || 0}
-            onRatingChange={(rating) => onRatingChange(book.id, rating)}
-          />
-          <button className="delete-btn" onClick={() => deleteBook(book.id)}>
-            X
-          </button>
-        </div>
       </div>
+
+      {isReviewExpanded && (
+        <div className="review-section">
+          <form onSubmit={handleReviewSubmit}>
+            <textarea
+              className="review-textarea"
+              value={reviewText}
+              onChange={handleReviewChange}
+              placeholder="Share your thoughts about this book..."
+              rows={3}
+            />
+            <div className="review-actions">
+              <button type="submit" className="submit-review">
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

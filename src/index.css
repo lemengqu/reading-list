@@ -92,14 +92,14 @@ button:hover {
 
 .reading-item button {
   padding: 4px 10px;
-  background-color: #e74c3c;
+  background-color: #fbf0ae;
   border-radius: 6px;
   font-weight: bold;
   min-width: 32px;
 }
 
 .reading-item button:hover {
-  background-color: #c0392b;
+  background-color: #efd243;
 }
 
 .read p {
@@ -111,7 +111,7 @@ button:hover {
   padding: 4px 10px;
   font-size: 0.9rem;
   line-height: 1;
-  background-color: #e74c3c;
+  background-color: #e74c3c !important;
   border-radius: 6px;
   font-weight: bold;
 }
