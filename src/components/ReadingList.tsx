@@ -8,6 +8,7 @@ interface ReadingListProps {
 }
 
 const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
+  // Load books from localStorage when component mounts
   const [books, setBooks] = useState(() => {
     const savedBooks = localStorage.getItem("books");
     return savedBooks ? JSON.parse(savedBooks) : [];
@@ -18,7 +19,9 @@ const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
   useEffect(() => {
+    // Whenever books change, save to localStorage
     localStorage.setItem("books", JSON.stringify(books));
+
     // Generate human-readable string for sharing
     const readableBooks = books
       .map((book: Book) => {
@@ -34,20 +37,22 @@ const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
   }, [books, setShareContent]);
 
   async function searchBooks(query: string) {
-    if (!query.trim()) {
+    if (query.trim() === "") {
       setSearchResults([]);
       return;
     }
 
     try {
       const response = await fetch(
+        // sending search query to Google Books and populating the state
         `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
           query
         )}&maxResults=10&projection=full`
       );
       const data = await response.json();
-      console.log(data);
       const savedBookIds = new Set(books.map((book: Book) => book.id));
+
+      // filter out books that are already in the list
       const filteredResults = (data.items || []).filter(
         (book: GoogleBook) => !savedBookIds.has(book.id)
       );
@@ -59,7 +64,7 @@ const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
   }
 
   function addBookFromAPI(book: GoogleBook) {
-    console.log(book.id);
+    // format Google data into local data structure
     const newBook: Book = {
       id: book.id,
       title: book.volumeInfo.title,
@@ -69,7 +74,6 @@ const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
       dateAdded: new Date().toISOString(),
       dateCompleted: null,
     };
-    console.log(newBook, "newBook");
     setBooks([newBook, ...books]);
     setSearchQuery("");
     setSearchResults([]);
@@ -155,54 +159,52 @@ const ReadingList: React.FC<ReadingListProps> = ({ setShareContent }) => {
 
   return (
     <div className="reading-list">
-      <div className="text-box-container">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search for a book..."
-            value={searchQuery}
-            onChange={handleInputChange}
-          />
-          {showDropdown &&
-            searchResults.length > 0 &&
-            searchQuery.length > 0 && (
-              <div className="search-dropdown">
-                {searchResults.map((book) => (
-                  <div
-                    key={book.id}
-                    className="search-result"
-                    onClick={() => addBookFromAPI(book)}
-                  >
-                    <img
-                      src={book.volumeInfo.imageLinks?.thumbnail || ""}
-                      alt={book.volumeInfo.title}
-                      className="book-cover"
-                    />
-                    <div className="book-info">
-                      <h3>{book.volumeInfo.title}</h3>
-                      {book.volumeInfo.authors && (
-                        <p className="book-authors">
-                          {book.volumeInfo.authors.join(", ")}
-                        </p>
-                      )}
-                      {book.volumeInfo.description && (
-                        <p className="book-description">
-                          {book.volumeInfo.description.substring(0, 100)}...
-                        </p>
-                      )}
-                      {book.volumeInfo.averageRating && (
-                        <p className="book-description">
-                          Rating:
-                          {renderStarRating(book.volumeInfo.averageRating)}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ))}
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search for a book..."
+          value={searchQuery}
+          onChange={handleInputChange}
+        />
+        {showDropdown && searchResults.length > 0 && searchQuery.length > 0 && (
+          <div className="search-dropdown">
+            {searchResults.map((book) => (
+              <div
+                key={book.id}
+                className="search-result"
+                onClick={() => addBookFromAPI(book)}
+              >
+                <img
+                  src={book.volumeInfo.imageLinks?.thumbnail || ""}
+                  alt={book.volumeInfo.title}
+                  className="book-cover"
+                />
+                <div className="book-info">
+                  <h3>{book.volumeInfo.title}</h3>
+                  {book.volumeInfo.authors && (
+                    <p className="book-authors">
+                      {book.volumeInfo.authors.join(", ")}
+                    </p>
+                  )}
+                  {book.volumeInfo.description && (
+                    <p className="book-description">
+                      {book.volumeInfo.description.substring(0, 100)}...
+                    </p>
+                  )}
+                  {book.volumeInfo.averageRating && (
+                    <p className="book-description">
+                      Rating:
+                      {renderStarRating(book.volumeInfo.averageRating)}
+                    </p>
+                  )}
+                </div>
               </div>
-            )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* sort books by read status and title */}
       {books
         .sort((a: Book, b: Book) => {
           if (a.read && !b.read) return 1;

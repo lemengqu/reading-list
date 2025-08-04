@@ -1,7 +1,8 @@
 import { Book } from "../types";
 import "./ReadingListItem.css";
 import StarRating from "./StarRating";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import BookReview from "./BookReview";
 
 interface ReadingListItemProps {
   book: Book; // The book item to display
@@ -9,6 +10,7 @@ interface ReadingListItemProps {
   toggleRead: (id: string) => void; // Function to toggle the read status
   onRatingChange: (id: string, rating: number) => void; // Function to handle rating changes
 }
+
 function ReadingListItem({
   book,
   deleteBook,
@@ -17,11 +19,13 @@ function ReadingListItem({
 }: ReadingListItemProps) {
   const { read, dateAdded, dateCompleted } = book;
 
+  // display added and completion date on hover
   const tooltipText = `Added: ${new Date(dateAdded).toLocaleString()}${
     read && dateCompleted
       ? `\nCompleted: ${new Date(dateCompleted).toLocaleString()}`
       : ""
   }`;
+
   function handleChange() {
     toggleRead(book.id);
   }
@@ -32,33 +36,9 @@ function ReadingListItem({
   }
 
   const [isReviewExpanded, setIsReviewExpanded] = useState(false);
-  const [reviewText, setReviewText] = useState("");
-
-  // Load saved review from localStorage when component mounts
-  useEffect(() => {
-    const savedReview = localStorage.getItem(`bookReview_${book.id}`);
-    if (savedReview) {
-      setReviewText(savedReview);
-    }
-  }, [book.id]);
-
-  // Save review to localStorage whenever it changes
-  const handleReviewChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newText = e.target.value;
-    setReviewText(newText);
-    localStorage.setItem(`bookReview_${book.id}`, newText);
-  };
 
   const toggleReview = () => {
     setIsReviewExpanded(!isReviewExpanded);
-  };
-
-  const handleReviewSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically save the review
-    console.log("Review submitted:", reviewText);
-    // Optionally collapse after submit
-    setIsReviewExpanded(false);
   };
 
   return (
@@ -109,24 +89,11 @@ function ReadingListItem({
         </div>
       </div>
 
-      {isReviewExpanded && (
-        <div className="review-section">
-          <form onSubmit={handleReviewSubmit}>
-            <textarea
-              className="review-textarea"
-              value={reviewText}
-              onChange={handleReviewChange}
-              placeholder="Share your thoughts about this book..."
-              rows={3}
-            />
-            <div className="review-actions">
-              <button type="submit" className="submit-review">
-                Save
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+      <BookReview 
+        bookId={book.id} 
+        isExpanded={isReviewExpanded} 
+        onClose={() => setIsReviewExpanded(false)} 
+      />
     </div>
   );
 }
